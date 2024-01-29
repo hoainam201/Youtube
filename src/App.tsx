@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Header} from "./layouts/Header";
+import {CategoryPills} from "./components/CategoryPills";
+import {categories, videos} from "./data/home";
+import {useState} from "react";
+import {VideoGripItem} from "./components/VideoGripItem";
+import {Sidebar} from "./layouts/Sidebar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+export default function () {
+    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+    return (
+        <div className="max-h-screen flex flex-col">
+            <Header/>
+            <div className={`grid grid-cols-[auto,1fr] flex-grow-1 overflow-auto`}>
+                <Sidebar/>
+                <div className="overflow-x-hidden px-8 pt-4">
+                    <div className={`sticky top-0 bg-white z-10 flex-grow-1 pb-4`}>
+                        <CategoryPills categories={categories} selectedCategory={selectedCategory}
+                                       onSelect={setSelectedCategory}/>
+                    </div>
+                    <div className={`grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]`}>
+                        {
+                            videos.map(video =>(
+                                <VideoGripItem
+                                    key={video.id}
+                                    {...video}
+                                />
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
-
-export default App;
